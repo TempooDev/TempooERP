@@ -1,6 +1,0 @@
-@TempooERP.Api_HostAddress = http://localhost:5063
-
-GET {{TempooERP.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

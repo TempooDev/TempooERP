@@ -35,9 +35,9 @@ trim_trailing_whitespace = false  # keep spaces in Markdown tables
 indent_size = 4
 csharp_new_line_before_open_brace = all
 csharp_style_namespace_declarations = file_scoped:suggestion
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_elsewhere = false:suggestion
+csharp_style_var_for_built_in_types = false:silent
+csharp_style_var_when_type_is_apparent = true:silent
+csharp_style_var_elsewhere = false:silent
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion
 csharp_style_expression_bodied_properties = when_on_single_line:suggestion
 csharp_style_prefer_primary_constructors = true:suggestion
@@ -56,6 +56,11 @@ dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
 # Analyzer severity baseline (can be tuned per project)
 [*.cs]
 dotnet_analyzer_diagnostic.severity = warning
+
+# Bajar severidad de reglas específicas
+dotnet_diagnostic.IDE0008.severity = silent
+dotnet_diagnostic.IDE0055.severity = silent
+dotnet_diagnostic.IDE0058.severity = silent
 
 # .editorconfig for solution/meta files
 [*.{sln,props,targets}]
