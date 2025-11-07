@@ -1,3 +1,19 @@
-<h1 class="text-3xl font-bold underline">
-  Hello world!
-</h1>
+<div class="p-4 text-center">
+  <h1 class="text-2xl font-bold mb-4">TempooERP</h1>
+
+  @if(backendOk === null){
+    <div>
+      🔄 Comprobando conexión con el backend...
+    </div>
+  }
+  @else if (backendOk === true) {
+    <div class="text-green-600 font-semibold">
+    ✅ Conectado al backend correctamente
+  </div>
+  }
+  @else if (backendOk===false) {
+    <div class="text-red-600 font-semibold">
+      ❌ No se pudo conectar al backend
+    </div>
+  }
+</div>
