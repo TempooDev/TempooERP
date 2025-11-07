@@ -3,6 +3,7 @@ const tsParser = require('@typescript-eslint/parser');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
 const angular = require('@angular-eslint/eslint-plugin');
 const angularTemplate = require('@angular-eslint/eslint-plugin-template');
+const angularTemplateParser = require('@angular-eslint/template-parser');
 
 module.exports = [
   // Ignorar build / tooling
@@ -25,11 +26,16 @@ module.exports = [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        project: ['./tsconfig.json'],
-        tsconfigRootDir: __dirname,
+        // Do not use project-based type-checking here to avoid parser errors; keep non-type-aware rules
         sourceType: 'module',
         ecmaVersion: 'latest',
       },
+      globals: {
+        // Browser globals for application code
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly'
+      }
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
@@ -69,7 +75,7 @@ module.exports = [
   {
     files: ['**/*.html'],
     languageOptions: {
-      parser: angularTemplate.parser,
+      parser: angularTemplateParser,
     },
     plugins: {
       '@angular-eslint/template': angularTemplate,
@@ -81,4 +87,59 @@ module.exports = [
       '@angular-eslint/template/no-negated-async': 'off',
     },
   },
+
+  // ============================
+  //  Node (SSR / server files)
+  // ============================
+  {
+    files: ['src/server.ts', '**/*.server.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: { sourceType: 'module', ecmaVersion: 'latest' },
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        global: 'readonly'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+      '@angular-eslint': angular,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...tsPlugin.configs.recommended.rules,
+      // Server-specific adjustments
+      'no-undef': 'off'
+    }
+  },
+
+  // ============================
+  //  Test Specs (Jasmine)
+  // ============================
+  {
+    files: ['**/*.spec.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: { sourceType: 'module', ecmaVersion: 'latest' },
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        beforeEach: 'readonly',
+        expect: 'readonly',
+        HTMLElement: 'readonly',
+        console: 'readonly'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+      '@angular-eslint': angular,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...tsPlugin.configs.recommended.rules,
+      ...angular.configs.recommended.rules,
+      'no-undef': 'off'
+    }
+  }
 ];
