@@ -1,0 +1,194 @@
+# ==============================================
+# TempooERP - .gitignore
+# Backend (.NET + Aspire) + Frontend (Angular)
+# ==============================================
+
+## --------------- ##
+## .NET / C# build ##
+## --------------- ##
+bin/
+obj/
+out/
+Debug/
+Release/
+x64/
+x86/
+[Aa]pp_[Dd]ebug/
+[Aa]pp_[Rr]elease/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Publish artifacts
+*.publishsettings
+*.Publish.xml
+publish/
+artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.lock.json
+project.lock.json
+*.deps.json
+*.runtimeconfig.json
+
+# Test results
+TestResult*/
+*.coverage
+*.coveragexml
+*.trx
+
+# Logs
+*.log
+logs/
+Logs/
+App_Data/
+
+# -------------- #
+# Aspire / Cloud #
+# -------------- #
+# Aspire generated manifests, environment & secrets
+.env*
+.envrc
+.env.local
+**/AppHost/obj/
+**/AppHost/bin/
+**/AppHost/Properties/launchSettings.json
+
+# Compose / containers
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose*.bak
+.docker/
+docker-data/
+Dockerfile.local
+
+# --------------- #
+# Frontend (Node) #
+# --------------- #
+node_modules/
+dist/
+build/
+.npm/
+.cache/
+.angular/
+.angular/cache/
+.angular/local/
+.angular/tmp/
+.angular/ssr/
+*.tgz
+
+# Angular environment files
+web/**/src/environments/environment*.ts
+
+# IDEs / Editors
+.vscode/
+.vscode-test/
+.idea/
+*.code-workspace
+*.vs
+*.sln.iml
+*.sln.ide
+
+# Mac / Windows OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.pid
+*.seed
+*.pid.lock
+
+# Package manager lockfiles
+# (uncomment only one if you want to commit locks)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ------------- #
+# Configuration #
+# ------------- #
+# local secrets and API keys
+*.secrets.json
+secrets.json
+appsettings.Development.json
+local.settings.json
+user-secrets/
+
+# --------------- #
+# CI / CD / Build #
+# --------------- #
+coverage/
+reports/
+TestResults/
+.temp/
+build-output/
+.github/workflows/tmp/
+*.tar
+*.zip
+
+# --------------- #
+# Misc & Archives #
+# --------------- #
+*.bak
+*.orig
+*.rej
+*.patch
+*.tmp
+*.old
+*.swp
+*.swo
+*.stackdump
+
+# --------------- #
+# Additional data #
+# --------------- #
+# JetBrains Rider
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+
+# Rider / ReSharper cache
+_ReSharper*/
+*.DotSettings.user
+
+# Visual Studio Code workspace settings
+.vscode/
+.vscode-test/
+
+# Tye / Aspire / Dev orchestration
+.tye/
+*.tye.json
+*.aspire.json
+
+# --------------- #
+# Personalization #
+# --------------- #
+# Local run data / sqlite / dev DB
+*.sqlite
+*.sqlite3
+*.db
+db-data/
+postgres-data/
+mssql-data/
+redis-data/
+
+# --------------- #
+# Temporary Assets #
+# --------------- #
+tmp/
+temp/
+__pycache__/

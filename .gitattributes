@@ -1,0 +1,43 @@
+# Normalize line endings and ensure LF in repo (cross-platform)
+* text=auto eol=lf
+
+# Treat images and binaries properly
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.7z   binary
+*.ttf  binary
+*.otf  binary
+*.woff binary
+*.woff2 binary
+
+# C# / .NET friendly diffs
+*.cs     diff=csharp
+*.csproj diff=xml
+*.vbproj diff=xml
+*.fsproj diff=xml
+*.props  diff=xml
+*.targets diff=xml
+*.sln    text eol=lf
+
+# Frontend lockfiles: prefer taking the current branch to avoid broken merges
+yarn.lock        merge=ours
+package-lock.json merge=ours
+pnpm-lock.yaml    merge=ours
+
+# Keep executable bit on scripts
+*.sh text eol=lf
+*.ps1 text eol=lf
+
+# GitHub linguist tweaks (optional)
+docs/** linguist-documentation
+*.md   linguist-documentation
+
+# Avoid noisy diffs for generated artifacts (if later added)
+# /src/**/bin/**  -diff
+# /src/**/obj/**  -diff
