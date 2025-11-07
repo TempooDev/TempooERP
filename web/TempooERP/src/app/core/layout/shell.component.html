@@ -1,0 +1,23 @@
+<div class="min-h-screen flex flex-col">
+  <header class="px-4 py-3 border-b flex items-center justify-between">
+    <div class="font-semibold text-lg">TempooERP</div>
+
+    <div class="text-sm">
+      @switch (backendOk) {
+        @case (null) {
+          <span>🔄 Comprobando API...</span>
+        }
+        @case (true) {
+          <span class="text-green-600 font-semibold">✅ API OK</span>
+        }
+        @case (false) {
+          <span class="text-red-600 font-semibold">❌ API CAÍDA</span>
+        }
+      }
+    </div>
+  </header>
+
+  <main class="flex-1 p-4">
+    <router-outlet></router-outlet>
+  </main>
+</div>
