@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Infrastructure/TempooERP.Infrastructure.csproj" />
+    <ProjectReference Include="../ServiceDefaults/TempooERP.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

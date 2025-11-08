@@ -1,6 +1,9 @@
 using TempooERP.Infrastructure.Extensions;
+using TempooERP.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 var frontendOrigin = builder.Configuration["Frontend:Origin"]
                       ?? "http://localhost:4200";
