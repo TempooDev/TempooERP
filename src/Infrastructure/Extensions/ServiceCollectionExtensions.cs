@@ -31,6 +31,7 @@ public static class DependencyInjection
                 var factory = sp.GetRequiredService<IDbContextFactory<ErpDbContext>>();
                 return factory.CreateDbContext();
             });
+
             return services;
         }
     }

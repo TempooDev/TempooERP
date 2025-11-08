@@ -11,4 +11,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Modules/Catalog/TempooERP.Modules.Catalog.csproj" />
+  </ItemGroup>
+
 </Project>
