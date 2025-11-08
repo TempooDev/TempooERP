@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using TempooERP.Api.Modules;
 using TempooERP.Infrastructure.Data;
 using TempooERP.Infrastructure.Extensions;
+using TempooERP.Modules.Catalog.Infrastructure;
 using TempooERP.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,13 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 var frontendOrigin = builder.Configuration["Frontend:Origin"]
                       ?? "http://localhost:4200";
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddSingleton<SeedDatabase>();
+builder.Services
+    .AddInfrastructure(builder.Configuration)
+    .ConfigureCatalogServices();
+
+// Seeder as scoped; executed manually inside a scope after migrations.
+builder.Services.AddScoped<SeedDatabase>();
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
-        policy.WithOrigins(frontendOrigin)
+            policy.WithOrigins(frontendOrigin)
               .AllowAnyHeader()
               .AllowAnyMethod()
     );
@@ -34,16 +40,14 @@ if (app.Environment.IsDevelopment())
     await dbContext.Database.EnsureCreatedAsync();
     Console.WriteLine("Database migrations applied.");
 
-    var seeder = scope.ServiceProvider.GetService<SeedDatabase>();
-    if (seeder is not null)
-    {
-        Console.WriteLine("Seeding database...");
-        await seeder.SeedAsync();
-        Console.WriteLine("Database seeded.");
-    }
+    var seeder = scope.ServiceProvider.GetRequiredService<SeedDatabase>();
+    Console.WriteLine("Seeding database (idempotent)...");
+    await seeder.SeedAsync();
+    Console.WriteLine("Database seed step finished.");
 }
 
-app.UseCors();
 app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
+
+app.MapCatalogEndpoints();
 
 app.Run();
