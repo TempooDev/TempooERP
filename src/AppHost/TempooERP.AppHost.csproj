@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Api/TempooERP.Api.csproj" />
-    <ProjectReference Include="../ServiceDefaults/TempooERP.ServiceDefaults.csproj" />
+    <ProjectReference Include="../ServiceDefaults/TempooERP.ServiceDefaults.csproj" IsAspireProjectResource="false"/>
   </ItemGroup>
 
 </Project>
