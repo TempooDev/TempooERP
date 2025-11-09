@@ -10,11 +10,10 @@ var api = builder.AddProject<Projects.TempooERP_Api>("erp-api")
     .WaitFor(erpDb)
     .WithReference(erpDb);
 
-var web = builder.AddPnpmApp("tempooerp-web", "../../web/TempooERP")
+var web = builder.AddPnpmApp("tempooerp-web", "../../web/TempooERP","start")
     .WithHttpEndpoint(port: 4200, env: "PORT")
     .WaitFor(api)
-    .WithReference(api)
-    .WithEnvironment("API_URL", api.GetEndpoint("http"));
+    .WithReference(api);
 
 api.WithEnvironment("Frontend__Origin", web.GetEndpoint("http"));
 
