@@ -13,8 +13,8 @@ export class ProductTableComponent {
     products = input<ProductDto[]>([]);
 
     columns: TableColumn[] = [
-    { field: 'name', header: 'Nombre', sortable: true },
-    { field: 'price', header: 'Precio', sortable: true, align: 'right' },
+      { field: 'name', header: 'Nombre', sortable: true },
+      { field: 'price', header: 'Precio', sortable: true, align: 'right' },
   ];
   loading = signal(false);
 

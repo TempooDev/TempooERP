@@ -15,15 +15,23 @@ public static class CatalogEndpoints
         {
             var catalog = endpoints.MapGroup(BasePath);
 
-            catalog.MapGet("/products", async (
-                IQueryHandler<GetProductsListQuery, IEnumerable<ProductListDto>> handler,
-                CancellationToken ct) =>
+            catalog.MapProductEndpoints();
+        }
+    }
+
+    extension(RouteGroupBuilder group)
+    {
+        public void MapProductEndpoints()
+        {
+            group.MapGet("/products", async (IQueryHandler<GetProductsListQuery, IEnumerable<ProductListDto>> queryHandler, CancellationToken cancellationToken) =>
             {
-                var products = await handler.Handle(new GetProductsListQuery(), ct);
-                return Results.Ok(products);
+                var query = new GetProductsListQuery();
+                var result = await queryHandler.HandleAsync(query, cancellationToken);
+                return Results.Ok(result);
             })
-            .WithName("GetProductsList")
-            .WithTags(Tag);
+            .WithTags(Tag)
+            .WithName("GetProducts")
+            .WithSummary("Gets the list of products.");
         }
     }
 }

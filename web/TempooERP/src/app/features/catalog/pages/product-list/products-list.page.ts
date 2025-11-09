@@ -14,6 +14,7 @@ import { ProductTableComponent } from "../../components/product-table/product-ta
 })
 export class ProductsListPage {
   productService = inject(ProductsService);
+  
   productsResult = toSignal(
     this.productService.getProducts(),
     {

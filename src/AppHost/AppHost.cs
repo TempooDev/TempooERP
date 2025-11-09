@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var postgres = builder.AddPostgres("postgres-server")
     .WithPgAdmin()
     .WithLifetime(ContainerLifetime.Persistent);
-    
+
 var erpDb = postgres.AddDatabase("erp-database");
 
 var api = builder.AddProject<Projects.TempooERP_Api>("erp-api")
