@@ -58,7 +58,6 @@ App_Data/
 .env.local
 **/AppHost/obj/
 **/AppHost/bin/
-**/AppHost/Properties/launchSettings.json
 
 # Compose / containers
 docker-compose.override.yml
