@@ -1,19 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using TempooERP.Infrastructure.Data;
 using TempooERP.Modules.Catalog.Domain;
 
-public class SeedDatabase
-{
-    private readonly IDbContextFactory<ErpDbContext> _dbContextFactory;
+namespace TempooERP.Infrastructure.Data;
 
-    public SeedDatabase(IDbContextFactory<ErpDbContext> dbContextFactory)
-    {
-        _dbContextFactory = dbContextFactory;
-    }
+public sealed class SeedDatabase(ErpDbContext dbContext)
+{
+    private readonly ErpDbContext _dbContext = dbContext;
 
     public async Task SeedAsync()
     {
-        await using var _dbContext = _dbContextFactory.CreateDbContext();
         if (await _dbContext.Products.AnyAsync())
         {
             return;

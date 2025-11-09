@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var postgres = builder.AddPostgres("postgres-server")
     .WithPgAdmin()
     .WithLifetime(ContainerLifetime.Persistent);
-    
+
 var erpDb = postgres.AddDatabase("erp-database");
 
 var api = builder.AddProject<Projects.TempooERP_Api>("erp-api")
@@ -14,7 +14,7 @@ var web = builder.AddPnpmApp("tempooerp-web", "../../web/TempooERP")
     .WithHttpEndpoint(port: 4200, env: "PORT")
     .WaitFor(api)
     .WithReference(api)
-    .WithEnvironment("API_URL", api.GetEndpoint("http"));
+    ;
 
 api.WithEnvironment("Frontend__Origin", web.GetEndpoint("http"));
 

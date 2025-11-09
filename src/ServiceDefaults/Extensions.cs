@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -52,12 +53,16 @@ public static class Extensions
             logging.IncludeScopes = true;
         });
 
-        builder.Services.AddOpenTelemetry()
+        var otlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]; // Standard OTLP endpoint env/config key
+
+        var otelBuilder = builder.Services.AddOpenTelemetry()
             .WithMetrics(metrics =>
             {
                 metrics.AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation();
+
+                // Only add OTLP exporter in a signal-specific way if we're NOT using the cross-cutting UseOtlpExporter below.
             })
             .WithTracing(tracing =>
             {
@@ -70,32 +75,23 @@ public static class Extensions
                     )
                     // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                     //.AddGrpcClientInstrumentation()
+                    .AddNpgsql()
                     .AddHttpClientInstrumentation();
             });
 
-        builder.AddOpenTelemetryExporters();
-
-        return builder;
-    }
-
-    private static TBuilder AddOpenTelemetryExporters<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
-    {
-        var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
-
-        if (useOtlpExporter)
+        // IMPORTANT: Use either signal-specific AddOtlpExporter() calls OR the cross-cutting UseOtlpExporter().
+        // We choose the cross-cutting method for simplicity; avoid calling AddOtlpExporter anywhere else.
+        if (!string.IsNullOrWhiteSpace(otlpEndpoint))
         {
-            builder.Services.AddOpenTelemetry().UseOtlpExporter();
+            // This configures OTLP export for traces, metrics and logs in one place.
+            otelBuilder.UseOtlpExporter();
         }
 
-        // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.AspNetCore package)
-        //if (!string.IsNullOrEmpty(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
-        //{
-        //    builder.Services.AddOpenTelemetry()
-        //       .UseAzureMonitor();
-        //}
-
         return builder;
     }
+
+    // Removed AddOpenTelemetryExporters: exporter configuration now happens once inside ConfigureOpenTelemetry to avoid
+    // mixing UseOtlpExporter with any signal-specific AddOtlpExporter registrations which caused a runtime exception.
 
     public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {

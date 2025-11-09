@@ -1,10 +1,9 @@
-const API_URL = process.env.API_URL || "http://localhost:5000";
-
 module.exports = {
-  "/api": {
-    target: API_URL,
+  '/api': {
+    target:
+      process.env['services__erp-api__http__0'] ||
+      process.env['services__erp-api__https__0'],
     secure: false,
     changeOrigin: true,
-    logLevel: "info"
-  }
+  },
 };
