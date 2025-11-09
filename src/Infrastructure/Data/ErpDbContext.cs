@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TempooERP.Modules.Catalog.Domain;
+using TempooERP.Modules.Catalog.Domain.Products;
 
 namespace TempooERP.Infrastructure.Data;
 

@@ -24,11 +24,11 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ErpDbContext>(opts =>
         {
             opts.UseNpgsql(connection);
-            opts.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
 
         // Register adapters for application abstractions
         services.AddScoped<IErpReadDbContext, ErpReadDbContextAdapter>();
+        services.AddScoped<IErpWriteDbContext, ErpWriteDbContextAdapter>();
         services.AddScoped<IProductReadRepository, ProductReadRepository>();
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

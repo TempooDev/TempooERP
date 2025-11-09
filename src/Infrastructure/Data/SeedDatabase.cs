@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TempooERP.Modules.Catalog.Domain;
+using TempooERP.Modules.Catalog.Domain.Products;
 
 namespace TempooERP.Infrastructure.Data;
 
@@ -17,9 +17,9 @@ public sealed class SeedDatabase(ErpDbContext dbContext)
         // Seed initial data
         var products = new List<Product>
         {
-            new() { Name = "Sample Product 1",  Price = 9.99M, TaxRate= 21, IsActive=true },
-            new() { Name = "Sample Product 2",  Price = 19.99M, TaxRate= 10, IsActive=true },
-            new() { Name = "Sample Product 3",  Price = 29.99M, TaxRate= 21, IsActive=false },
+           Product.CreateProduct("Sample Product 1",9.99M,21,true),
+            Product.CreateProduct("Sample Product 2", 19.99M, 10, true),
+            Product.CreateProduct("Sample Product 3", 29.99M, 21, false),
         };
 
         await _dbContext.Products.AddRangeAsync(products);
