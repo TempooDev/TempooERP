@@ -23,6 +23,7 @@ builder.Services.AddCors(options =>
             policy.WithOrigins(frontendOrigin)
               .AllowAnyHeader()
               .AllowAnyMethod()
+              .WithExposedHeaders("traceparent", "tracestate")
     );
 });
 
@@ -45,6 +46,8 @@ if (app.Environment.IsDevelopment())
     await seeder.SeedAsync();
     Console.WriteLine("Database seed step finished.");
 }
+
+app.UseCors();
 
 app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
 

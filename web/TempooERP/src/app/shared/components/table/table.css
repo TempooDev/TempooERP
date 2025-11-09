@@ -1,0 +1,17 @@
+:host ::ng-deep .p-table table {
+  width: 100%;
+}
+
+:host ::ng-deep th {
+  font-weight: 600;
+}
+
+:host ::ng-deep td,
+:host ::ng-deep th {
+  padding: 0.75rem 1rem;
+}
+
+:host ::ng-deep tbody tr:hover {
+  background: var(--surface-50);
+  cursor: pointer;
+}

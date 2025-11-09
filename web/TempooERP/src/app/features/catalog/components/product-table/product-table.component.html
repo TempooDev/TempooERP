@@ -1,0 +1,8 @@
+<app-table
+  [columns]="columns"
+  [value]="products()"
+  [loading]="loading()"
+  [paginator]="true"
+  [rows]="10"
+  (rowClick)="onRowClick($event)">
+</app-table>

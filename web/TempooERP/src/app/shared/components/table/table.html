@@ -1,0 +1,50 @@
+<p-table
+  [value]="value()"
+  [paginator]="paginator()"
+  [rows]="rows()"
+  [rowsPerPageOptions]="rowsPerPageOptions()"
+  [loading]="loading()"
+>
+  <ng-template #header>
+    <tr>
+      @for (col of columns(); track col.field) {
+        <th
+          [style.width]="col.width"
+          [style.text-align]="col.align || 'left'"
+          [pSortableColumn]="col.sortable ? col.field : ''"
+          [pSortableColumnDisabled]="!col.sortable"
+        >
+          {{ col.header }}
+
+          @if (col.sortable) {
+            <p-sortIcon [field]="col.field" />
+          }
+        </th>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-row>
+    <tr (click)="onRowClick(row)">
+      @for (col of columns(); track col.field) {
+        <td [style.text-align]="col.align || 'left'">
+          @if (!hasCustomBody()) {
+            {{ row[col.field] }}
+          } @else {
+            <ng-container
+              *ngTemplateOutlet="bodyTemplate; context: { $implicit: row, col: col }"
+            ></ng-container>
+          }
+        </td>
+      }
+    </tr>
+  </ng-template>
+
+  <ng-template #emptymessage>
+    <tr>
+      <td [attr.colspan]="columns().length" class="text-center">
+        {{ emptyMessage() }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
