@@ -37,13 +37,13 @@ public class Product
 
     public static Product UpdateDetails(
         Product product,
-        string name,
-        decimal price,
-        bool isActive)
+        string? name,
+        decimal? price,
+        bool? isActive)
     {
-        product.Name = name;
-        product.Price = price;
-        product.IsActive = isActive;
+        product.Name = name ?? product.Name;
+        product.Price = price ?? product.Price;
+        product.IsActive = isActive ?? product.IsActive;
         return product;
     }
 }

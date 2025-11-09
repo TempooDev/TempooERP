@@ -3,7 +3,7 @@ using TempooERP.Modules.Catalog.Application.Abstractions;
 
 namespace TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;
 
-public class DeleteProductHandler(
+public sealed class DeleteProductHandler(
     IUnitOfWork unitOfWork,
     IErpWriteDbContext dbContext) : ICommandHandler<DeleteProductCommand>
 {

@@ -4,7 +4,7 @@ using TempooERP.Modules.Catalog.Domain.Products;
 
 namespace TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
 
-public class CreateProductHandler(
+public sealed class CreateProductHandler(
     IUnitOfWork unitOfWork,
     IErpWriteDbContext dbContext) : ICommandHandler<CreateProductCommand>
 {

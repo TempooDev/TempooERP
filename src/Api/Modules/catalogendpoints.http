@@ -1,0 +1,27 @@
+### Get all products
+https://localhost:7220/api/catalog/products
+Content-Type: application/json
+
+### Create a new product
+POST https://localhost:7220/api/catalog/products
+Content-Type: application/json
+
+{
+    "name": "Sample Product",
+    "price": 29.99,
+    "taxRate":21,
+    "isActive":true
+}
+
+### Update an existing product
+PUT https://localhost:7220/api/catalog/products/019a6ad8-5960-7f43-93bc-e6476bf557b1
+Content-Type: application/json
+
+{
+    "id": "019a6ad8-5960-7f43-93bc-e6476bf557b1",
+    "isActive": false
+}
+
+### Delete a product
+DELETE https://localhost:7220/api/catalog/products/019a6ad0-4c86-7305-aae8-9b119c5a8cc6
+Content-Type: application/json

@@ -4,7 +4,7 @@ using TempooERP.Modules.Catalog.Domain.Products;
 
 namespace TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
 
-public class UpdateProductHandler(
+public sealed class UpdateProductHandler(
     IUnitOfWork unitOfWork,
     IErpWriteDbContext dbContext) : ICommandHandler<UpdateProductCommand>
 {
