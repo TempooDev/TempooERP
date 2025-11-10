@@ -1,11 +1,16 @@
 <p-table
-  [value]="value()"
-  [paginator]="paginator()"
-  [rows]="rows()"
-  [rowsPerPageOptions]="rowsPerPageOptions()"
+  [value]="items"
   [loading]="loading()"
+  [paginator]="!!paged()"
+  [rows]="pageSize"
+  [totalRecords]="totalRecords"
+  [rowsPerPageOptions]="rowsPerPageOptions()"
+  [lazy]="true"
+  [first]="getFirst()"
+  (onPage)="onPage($event)"
+  (onSort)="onSort($event)"
 >
-  <ng-template #header>
+  <ng-template pTemplate="header">
     <tr>
       @for (col of columns(); track col.field) {
         <th
@@ -23,8 +28,7 @@
       }
     </tr>
   </ng-template>
-
-  <ng-template #body let-row>
+  <ng-template pTemplate="body" let-row>
     <tr (click)="onRowClick(row)">
       @for (col of columns(); track col.field) {
         <td [style.text-align]="col.align || 'left'">
@@ -39,8 +43,7 @@
       }
     </tr>
   </ng-template>
-
-  <ng-template #emptymessage>
+  <ng-template pTemplate="emptymessage">
     <tr>
       <td [attr.colspan]="columns().length" class="text-center">
         {{ emptyMessage() }}

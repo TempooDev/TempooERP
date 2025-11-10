@@ -1,4 +1,4 @@
-using TempooERP.BuildingBlocks.Application;
+using TempooERP.BuildingBlocks.Application.Abstractions;
 
 namespace TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
 

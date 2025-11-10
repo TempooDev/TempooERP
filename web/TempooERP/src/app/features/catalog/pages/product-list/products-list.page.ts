@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductDto } from '../../../../core/api/catalog/produtc.dto';
 import { Result } from '../../../../core/api/result';
 import { ProductTableComponent } from "../../components/product-table/product-table.component";
+import { emptyPagedList, PagedList } from '../../../../core/api/PagedList';
 
 @Component({
   selector: 'app-products-list',
@@ -13,20 +14,4 @@ import { ProductTableComponent } from "../../components/product-table/product-ta
   templateUrl: './products-list.page.html',
 })
 export class ProductsListPage {
-  productService = inject(ProductsService);
-  
-  productsResult = toSignal(
-    this.productService.getProducts(),
-    {
-      initialValue: new Result<ProductDto[]>({
-        success: true,
-        data: [],
-      }),
-    }
-  );
-
-  products = computed<ProductDto[]>(
-    () => this.productsResult().data ?? []
-  );
 }
-    

@@ -1,4 +1,4 @@
-namespace TempooERP.BuildingBlocks.Application;
+namespace TempooERP.BuildingBlocks.Application.Abstractions;
 
 public interface IQueryHandler<TQuery, TResult> where TQuery : IQueryEntity
 {

@@ -1,4 +1,5 @@
 using TempooERP.BuildingBlocks.Application;
+using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.Modules.Catalog.Application.Abstractions;
 
 namespace TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;

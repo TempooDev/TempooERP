@@ -1,4 +1,5 @@
 using TempooERP.BuildingBlocks.Application;
+using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.Modules.Catalog.Application.Abstractions;
 using TempooERP.Modules.Catalog.Domain.Products;
 
