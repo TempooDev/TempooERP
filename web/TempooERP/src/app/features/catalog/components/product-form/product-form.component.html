@@ -1,0 +1,44 @@
+<form [formGroup]="createProductForm" (ngSubmit)="onSubmit()" novalidate class="flex flex-col gap-4 w-full sm:w-56">
+  <div class="flex flex-col gap-1">
+    <input pInputText id="name" placeholder="Nombre" formControlName="name" [class.p-invalid]="isInvalid('name')" />
+    @if (showErrors('name')) {
+    @for (msg of controlErrorMessages('name'); track $index) {
+    <p-message severity="error" size="small" variant="simple">{{ msg }}</p-message>
+    }
+    }
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <input pInputText type="number" id="price" placeholder="Precio" formControlName="price"
+      [class.p-invalid]="isInvalid('price')" />
+    @if (showErrors('price')) {
+    @for (msg of controlErrorMessages('price'); track $index) {
+    <p-message severity="error" size="small" variant="simple">{{ msg }}</p-message>
+    }
+    }
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <input pInputText type="number" id="taxRate" placeholder="Impuesto (%)" formControlName="taxRate"
+      [class.p-invalid]="isInvalid('taxRate')" />
+    @if (showErrors('taxRate')) {
+    @for (msg of controlErrorMessages('taxRate'); track $index) {
+    <p-message severity="error" size="small" variant="simple">{{ msg }}</p-message>
+    }
+    }
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <div class="flex items-center">
+      <p-checkbox formControlName="isActive" binary="true" inputId="isActive" label="Activo"></p-checkbox>
+      <label for="isActive" class="ml-2"> Activo </label>
+    </div>
+    @if (showErrors('isActive')) {
+    @for (msg of controlErrorMessages('isActive'); track $index) {
+    <p-message severity="error" size="small" variant="simple">{{ msg }}</p-message>
+    }
+    }
+  </div>
+
+  <button pButton severity="secondary" type="submit"><span pButtonLabel>Guardar</span></button>
+</form>
