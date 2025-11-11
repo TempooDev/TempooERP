@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using TempooERP.BuildingBlocks.Application.Abstractions;
+using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
@@ -12,22 +13,25 @@ public static class DependencyInjection
     public static IServiceCollection ConfigureCatalogServices(this IServiceCollection services)
     {
 
-        services.AddScoped<IQueryHandler<
+        services.AddQueryHandler<
             GetProductByCriteriaQuery,
-            PagedResult<ProductDto>>,
+            PagedResult<ProductDto>,
             GetProductByCriteriaHandler>();
 
-        services.AddScoped<ICommandHandler<
-            CreateProductCommand>,
-            CreateProductHandler>();
+        services.AddValidatedCommandHandler<
+            CreateProductCommand,
+            Guid,
+            CreateProductHandler,
+            CreateProductCommandValidator>();
 
-        services.AddScoped<ICommandHandler<
-            UpdateProductCommand>,
+        services.AddCommandHandler<
+            UpdateProductCommand,
             UpdateProductHandler>();
 
-        services.AddScoped<ICommandHandler<
-            DeleteProductCommand>,
+        services.AddCommandHandler<
+            DeleteProductCommand,
             DeleteProductHandler>();
+
         return services;
     }
 }

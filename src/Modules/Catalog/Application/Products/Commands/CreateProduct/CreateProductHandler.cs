@@ -7,12 +7,14 @@ namespace TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
 
 public sealed class CreateProductHandler(
     IUnitOfWork unitOfWork,
-    IErpWriteDbContext dbContext) : ICommandHandler<CreateProductCommand>
+    IErpWriteDbContext dbContext) : ICommandHandler<CreateProductCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IErpWriteDbContext _dbContext = dbContext;
 
-    public async Task HandleAsync(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> HandleAsync(
+        CreateProductCommand command,
+        CancellationToken ct = default)
     {
         var product = Product.CreateProduct(
             command.Name,
@@ -20,7 +22,8 @@ public sealed class CreateProductHandler(
             command.TaxRate,
             command.IsActive);
 
-        await _dbContext.AddAsync(product, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken); // Commit transaction
+        await _dbContext.AddAsync(product, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+        return product.Id;
     }
 }
