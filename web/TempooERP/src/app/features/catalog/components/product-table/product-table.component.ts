@@ -32,11 +32,10 @@ export class ProductTableComponent {
   private readonly query = computed(() => ({
     page: this.page(),
     pageSize: this.pageSize(),
-    sortBy: this.sortBy() ?? undefined,
+    sortBy: this.sortBy() ?? "",
     sortDirection: this.sortDirection(),
   }));
 
-  // 👉 llamada al servicio convertida a signal reactivo
   private readonly productsPagedInternal = toSignal(
     toObservable(this.query).pipe(
       switchMap(params => {
@@ -44,8 +43,8 @@ export class ProductTableComponent {
 
         return this.productService.getProducts(params).pipe(
           map(result => {
-            if (result.success && result.data) {
-              return result.data as PagedList<ProductDto>;
+            if (result.isSuccess() && result.getData()) {
+              return result.getData() as PagedList<ProductDto>;
             }
             return this.emptyPaged(params.page, params.pageSize);
           }),
