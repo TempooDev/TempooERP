@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, computed, inject, input, signal } from "@angular/core";
-import { ProductDto } from "../../../../core/api/catalog/produtc.dto";
+import { ProductDto } from "../../../../core/api/catalog/product.dto";
 import { PageChangeEvent, SortChangeEvent, TableColumn, TableComponent } from "../../../../shared/components/table/table";
 import { ProductsService } from "../../../../core/api/catalog/products.service";
 import { PagedList } from "../../../../core/api/PagedList";
