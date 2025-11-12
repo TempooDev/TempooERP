@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { ProductDto } from './produtc.dto';
+import { ProductDto } from './product.dto';
 import { Result } from '../result';
 import { PagedList } from '../PagedList';
+import { CreateProductCommand } from './createproduct.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
@@ -17,13 +18,29 @@ export class ProductsService {
         data: res.data,
         message: res.message,
       })),
-      catchError(() =>
-        of(new Result<PagedList<ProductDto>>({
-          success: false,
-          message: 'Failed to fetch products',
-          errors: {}
-        }))
-      )
-    );
+        catchError(() =>
+          of(new Result<PagedList<ProductDto>>({
+            success: false,
+            message: 'Failed to fetch products',
+            errors: {}
+          }))
+        )
+      );
+    }
+
+    createProduct(createDto: CreateProductCommand): Observable<Result<void|undefined>> {
+      return this.http.post<Result<void|undefined>>(this.baseUrl, createDto).pipe(
+        map(res => new Result<void>({
+          success: res.success,
+          message: res.message,
+        })),
+        catchError(() =>
+          of(new Result<void|undefined>({
+            success: false,
+            message: 'Failed to create product',
+            errors: {}
+          }))
+        )
+      );
   }
 }
