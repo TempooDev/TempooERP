@@ -60,6 +60,7 @@ public static class Extensions
             {
                 metrics.AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
+                    .AddNpgsqlInstrumentation()
                     .AddRuntimeInstrumentation();
 
                 // Only add OTLP exporter in a signal-specific way if we're NOT using the cross-cutting UseOtlpExporter below.

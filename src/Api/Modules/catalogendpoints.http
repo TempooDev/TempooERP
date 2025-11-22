@@ -1,15 +1,16 @@
 ### Get all products
-https://localhost:7220/api/catalog/products
+Get https://localhost:7220/api/catalog/products?id=019aac10-f13b-7885-abc1-40e59a2eff7a
 Content-Type: application/json
+
 
 ### Create a new product
 POST https://localhost:7220/api/catalog/products
 Content-Type: application/json
 
 {
-    "name": "Sample Product",
-    "price": 29.99,
-    "taxRate":21,
+    "name": "aass",
+    "price": 99.99,
+    "taxRate":100,
     "isActive":true
 }
 

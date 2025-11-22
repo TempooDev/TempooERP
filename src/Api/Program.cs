@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TempooERP.Api.Modules;
+using TempooERP.BuildingBlocks.API.Middleware;
 using TempooERP.Infrastructure.Data;
 using TempooERP.Infrastructure.Extensions;
 using TempooERP.Modules.Catalog.Infrastructure;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 var frontendOrigin = builder.Configuration["Frontend:Origin"]
                       ?? "http://localhost:4200";
+
+builder.Services.AddValidation();
 builder.Services
     .AddInfrastructure(builder.Configuration)
     .ConfigureCatalogServices();
@@ -48,6 +51,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
 

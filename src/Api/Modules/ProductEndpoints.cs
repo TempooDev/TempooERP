@@ -1,10 +1,14 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using TempooERP.Api.Modules;
 using TempooERP.BuildingBlocks.Application.Abstractions;
+using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
+using TempooERP.Modules.Catalog.Application.Products.Queries;
 using TempooERP.Modules.Catalog.Application.Products.Queries.GetByCriteria;
+using TempooERP.Modules.Catalog.Application.Products.Queries.GetById;
 
 namespace TempooERP.Api.Modules;
 
@@ -14,25 +18,44 @@ public static class ProductEndpoints
     {
         public void MapProductEndpoints()
         {
+            // Queries
             group.MapGet("/products", async (
                 [AsParameters] GetProductByCriteriaQuery query,
                 IQueryHandler<GetProductByCriteriaQuery, PagedResult<ProductDto>> queryHandler,
                 CancellationToken cancellationToken) =>
             {
                 var result = await queryHandler.HandleAsync(query, cancellationToken);
-                return Results.Ok(result);
+                return Results.Ok(result.ToResult());
             })
             .WithTags(CatalogEndpoints.Tag)
             .WithName("GetProducts")
             .WithSummary("Gets the paged list of products with optional filters.");
 
+            group.MapGet("/products/{id}", async (
+                Guid id,
+                [FromServices] IQueryHandler<GetProductByIdQuery, Result<ProductDto?>> queryHandler,
+                CancellationToken ct) =>
+            {
+                    var result = await queryHandler.HandleAsync(new GetProductByIdQuery(id), ct);
+
+                return result.Data is null
+                    ? Results.NotFound()
+                    : Results.Ok(result);
+            })
+            .WithTags(CatalogEndpoints.Tag)
+            .WithName("GetProductById")
+            .WithSummary("Get the product by Id, if no exits sent 404");
+
+            // Commands
             group.MapPost("/products", async (
-                [FromServices] ICommandHandler<CreateProductCommand> commandHandler,
+                [FromServices] ICommandHandler<CreateProductCommand, Guid> commandHandler,
                 [FromBody] CreateProductCommand command,
                 CancellationToken cancellationToken) =>
             {
-                await commandHandler.HandleAsync(command, cancellationToken);
-                return Results.Created($"/api/catalog/products/{command.Name}", null);
+                var productId = await commandHandler.HandleAsync(command, cancellationToken);
+                return Results.Created(
+                    $"/api/catalog/products/{productId}",
+                    Result.Ok("Product created successfully."));
             })
             .WithTags(CatalogEndpoints.Tag)
             .WithName("CreateProduct")

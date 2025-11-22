@@ -11,7 +11,10 @@
     <PackageVersion Include="Aspire.Hosting.JavaScript" Version="13.0.0" />
     <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+    <PackageVersion Include="FluentValidation" Version="12.1.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.14.28" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-rc.2.25502.107" />
     <PackageVersion Include="Npgsql.OpenTelemetry" Version="10.0.0-rc.1" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.1" />

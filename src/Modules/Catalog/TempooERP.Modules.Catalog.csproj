@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Application/" />
     <Folder Include="Infrastructure/" />
   </ItemGroup>
 
@@ -20,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" />
   </ItemGroup>
 

@@ -1,9 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using TempooERP.BuildingBlocks.Application.Abstractions;
+using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
+using TempooERP.Modules.Catalog.Application.Products.Queries;
 using TempooERP.Modules.Catalog.Application.Products.Queries.GetByCriteria;
+using TempooERP.Modules.Catalog.Application.Products.Queries.GetById;
 
 namespace TempooERP.Modules.Catalog.Infrastructure;
 
@@ -12,22 +15,30 @@ public static class DependencyInjection
     public static IServiceCollection ConfigureCatalogServices(this IServiceCollection services)
     {
 
-        services.AddScoped<IQueryHandler<
+        services.AddQueryHandler<
             GetProductByCriteriaQuery,
-            PagedResult<ProductDto>>,
+            PagedResult<ProductDto>,
             GetProductByCriteriaHandler>();
 
-        services.AddScoped<ICommandHandler<
-            CreateProductCommand>,
-            CreateProductHandler>();
+        services.AddQueryHandler<
+            GetProductByIdQuery,
+            Result<ProductDto?>,
+            GetProductByIdHandler>();
 
-        services.AddScoped<ICommandHandler<
-            UpdateProductCommand>,
+        services.AddValidatedCommandHandler<
+            CreateProductCommand,
+            Guid,
+            CreateProductHandler,
+            CreateProductCommandValidator>();
+
+        services.AddCommandHandler<
+            UpdateProductCommand,
             UpdateProductHandler>();
 
-        services.AddScoped<ICommandHandler<
-            DeleteProductCommand>,
+        services.AddCommandHandler<
+            DeleteProductCommand,
             DeleteProductHandler>();
+
         return services;
     }
 }
