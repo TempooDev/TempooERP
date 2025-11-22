@@ -6,7 +6,9 @@ using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;
 using TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
+using TempooERP.Modules.Catalog.Application.Products.Queries;
 using TempooERP.Modules.Catalog.Application.Products.Queries.GetByCriteria;
+using TempooERP.Modules.Catalog.Application.Products.Queries.GetById;
 
 namespace TempooERP.Api.Modules;
 
@@ -28,6 +30,21 @@ public static class ProductEndpoints
             .WithTags(CatalogEndpoints.Tag)
             .WithName("GetProducts")
             .WithSummary("Gets the paged list of products with optional filters.");
+
+            group.MapGet("/products/{id}", async (
+                Guid id,
+                [FromServices] IQueryHandler<GetProductByIdQuery, Result<ProductDto?>> queryHandler,
+                CancellationToken ct) =>
+            {
+                    var result = await queryHandler.HandleAsync(new GetProductByIdQuery(id), ct);
+
+                return result.Data is null
+                    ? Results.NotFound()
+                    : Results.Ok(result);
+            })
+            .WithTags(CatalogEndpoints.Tag)
+            .WithName("GetProductById")
+            .WithSummary("Get the product by Id, if no exits sent 404");
 
             // Commands
             group.MapPost("/products", async (

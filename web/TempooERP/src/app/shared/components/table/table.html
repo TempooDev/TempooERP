@@ -1,45 +1,34 @@
-<p-table
-  [value]="items"
-  [loading]="loading()"
-  [paginator]="!!paged()"
-  [rows]="pageSize"
-  [totalRecords]="totalRecords"
-  [rowsPerPageOptions]="rowsPerPageOptions()"
-  [lazy]="true"
-  [first]="getFirst()"
-  (onPage)="onPage($event)"
-  (onSort)="onSort($event)"
->
+<p-table [value]="items" [loading]="loading()" [paginator]="!!paged()" [rows]="pageSize" [totalRecords]="totalRecords"
+  [rowsPerPageOptions]="rowsPerPageOptions()" [lazy]="true" [first]="getFirst()" (onPage)="onPage($event)"
+  (onSort)="onSort($event)">
   <ng-template pTemplate="header">
     <tr>
       @for (col of columns(); track col.field) {
-        <th
-          [style.width]="col.width"
-          [style.text-align]="col.align || 'left'"
-          [pSortableColumn]="col.sortable ? col.field : ''"
-          [pSortableColumnDisabled]="!col.sortable"
-        >
-          {{ col.header }}
-
-          @if (col.sortable) {
-            <p-sortIcon [field]="col.field" />
-          }
-        </th>
+      <th [style.width]="col.width" [style.text-align]="col.align || 'left'"
+        [pSortableColumn]="col.sortable ? col.field : ''" [pSortableColumnDisabled]="!col.sortable">
+        {{ col.header }} @if (col.sortable) {
+        <p-sortIcon [field]="col.field" />
+        }
+      </th>
+      } @for (action of actions() ; track $index) {
+      <th style="width: 3rem" [pSortableColumn]="''" [pSortableColumnDisabled]="true"></th>
       }
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-row>
     <tr (click)="onRowClick(row)">
       @for (col of columns(); track col.field) {
-        <td [style.text-align]="col.align || 'left'">
-          @if (!hasCustomBody()) {
-            {{ row[col.field] }}
-          } @else {
-            <ng-container
-              *ngTemplateOutlet="bodyTemplate; context: { $implicit: row, col: col }"
-            ></ng-container>
-          }
-        </td>
+      <td [style.text-align]="col.align || 'left'">
+        @if (!hasCustomBody()) { {{ row[col.field] }} } @else {
+        <ng-container *ngTemplateOutlet="bodyTemplate; context: { $implicit: row, col: col }"></ng-container>
+        }
+      </td>
+      } @for (action of actions() ; track $index) {
+      <td style="text-align: center">
+        <p-button type="button" [icon]="action.icon ?? defaultActionIcon" [severity]="action.severity || 'secondary'"
+          class="p-button-rounded p-button-text p-button-plain" (click)="action.onClick(row); $event.stopPropagation()"
+          [title]="action.label"></p-button>
+      </td>
       }
     </tr>
   </ng-template>

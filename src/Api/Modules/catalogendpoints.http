@@ -1,5 +1,5 @@
 ### Get all products
-Get https://localhost:7220/api/catalog/products?page=1&pageSize=10&sortBy=name&sortDirection=asc
+Get https://localhost:7220/api/catalog/products?id=019aac10-f13b-7885-abc1-40e59a2eff7a
 Content-Type: application/json
 
 

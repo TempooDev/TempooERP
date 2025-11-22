@@ -1,1 +1,7 @@
-<app-products-form></app-products-form>
+@if (isLoading()) {
+<div class="flex justify-center items-center p-8">
+  <p>Cargando...</p>
+</div>
+} @else {
+<app-products-form [product]="productDto()"></app-products-form>
+}

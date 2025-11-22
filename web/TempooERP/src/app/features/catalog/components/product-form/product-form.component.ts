@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal, effect } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ProductsService } from '../../../../core/api/catalog/products.service';
 import {
@@ -16,6 +16,8 @@ import { MessageModule } from 'primeng/message';
 import { CreateProductCommand } from '../../../../core/api/catalog/createproduct.dto';
 import { MessageService } from 'primeng/api';
 import { IResult } from '../../../../core/api/result';
+import { ProductDto } from '../../../../core/api/catalog/product.dto';
+import { UpdateProductCommand } from '../../../../core/api/catalog/update-product.dto';
 
 type MessageSeverity =
   | 'success'
@@ -46,11 +48,14 @@ export class ProductFormComponent {
   private messageService = inject(MessageService);
   private location = inject(Location);
 
+  product = input<ProductDto | null>(null);
+
   resultSignal = signal<IResult<any> | null>(null);
 
   messagesSignal = signal<
     { severity: MessageSeverity; summary: string; detail: string }[]
   >([]);
+
   createProductForm = this.fb.group({
     name: [
       '',
@@ -63,6 +68,20 @@ export class ProductFormComponent {
     taxRate: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
     isActive: [true, [Validators.required]],
   });
+
+  constructor() {
+    effect(() => {
+      const productData = this.product();
+      if (productData) {
+        this.createProductForm.patchValue({
+          name: productData.name,
+          price: productData.price,
+          taxRate: productData.taxRate,
+          isActive: productData.isActive,
+        });
+      }
+    });
+  }
 
   private readonly validationMessages: Record<
     string,
@@ -99,7 +118,7 @@ export class ProductFormComponent {
     if (!c || !c.errors) return [];
     const map = this.validationMessages[controlName] || {};
     return Object.entries(c.errors).map(([key, val]) =>
-      map[key] ? map[key](val, c) : `Error: ${key}`
+      map[key] ? map[key](val, c) : `Error: ${key}`,
     );
   }
 
@@ -117,8 +136,70 @@ export class ProductFormComponent {
       });
       return;
     }
+    if (this.product()) {
+      this.updateProduct();
+    } else {
+      this.createProduct();
+    }
+  }
 
-    this.createProduct();
+  updateProduct() {
+    let productData = UpdateProductCommand.updateProduct(
+      this.product()!.id,
+      this.createProductForm.value.name!,
+      this.createProductForm.value.price!,
+      this.createProductForm.value.taxRate!,
+      this.createProductForm.value.isActive!,
+    );
+
+    this.productsService.updateProduct(productData).subscribe({
+      next: (result) => {
+        this.resultSignal.set(result);
+
+        const messages: {
+          severity: MessageSeverity;
+          summary: string;
+          detail: string;
+        }[] = [];
+
+        if (result.success) {
+          messages.push({
+            severity: 'success',
+            summary: 'Producto actualizado',
+            detail: 'El producto se ha actualizado correctamente.',
+          });
+
+          this.location.back();
+        } else if (result.errors && Object.keys(result.errors).length > 0) {
+          Object.entries(result.errors).forEach(([field, msgs]) => {
+            (msgs as string[]).forEach((msg) => {
+              messages.push({
+                severity: 'error',
+                summary: `Error en ${field}`,
+                detail: msg,
+              });
+            });
+          });
+        } else {
+          messages.push({
+            severity: 'error',
+            summary: 'Error',
+            detail: result.message ?? 'No se pudo actualizar el producto.',
+          });
+        }
+
+        this.messagesSignal.set(messages);
+      },
+      error: () => {
+        this.messagesSignal.set([
+          {
+            severity: 'error',
+            summary: 'Error del servidor',
+            detail: 'Ha ocurrido un error al actualizar el producto.',
+          },
+        ]);
+      },
+    });
   }
 
   createProduct() {
@@ -126,7 +207,7 @@ export class ProductFormComponent {
       this.createProductForm.value.name!,
       this.createProductForm.value.price!,
       this.createProductForm.value.taxRate!,
-      this.createProductForm.value.isActive!
+      this.createProductForm.value.isActive!,
     );
 
     this.productsService.createProduct(productData).subscribe({

@@ -11,4 +11,8 @@ export const CATALOG_ROUTES: Routes = [
     path: 'products/create',
     component: ProductEditPage,
   },
+  {
+    path: 'products/edit/:id',
+    component: ProductEditPage,
+  },
 ];

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Catalog.Application.Abstractions;
-using TempooERP.Modules.Catalog.Application.Products.Queries.GetByCriteria;
+using TempooERP.Modules.Catalog.Application.Products.Queries;
 using TempooERP.Modules.Catalog.Domain.Products;
 
 namespace TempooERP.Infrastructure.Repositories;
@@ -11,6 +11,25 @@ namespace TempooERP.Infrastructure.Repositories;
 public sealed class ProductReadRepository(IErpReadDbContext db) : IProductReadRepository
 {
     private readonly IErpReadDbContext _db = db;
+
+    public async Task<ProductDto?> GetByIdAsync(
+        Guid id,
+        CancellationToken ct = default)
+    {
+        var product = await _db
+            .Products
+            .AsNoTracking()
+            .SingleOrDefaultAsync(p => p.Id == id, ct);
+
+        return product is not null ?
+            new ProductDto(
+                product.Id,
+                product.Name,
+                product.Price,
+                product.TaxRate,
+                product.IsActive)
+        : null;
+    }
 
     public async Task<PagedResult<ProductDto>> SearchAsync(
         Expression<Func<Product, bool>> predicate,

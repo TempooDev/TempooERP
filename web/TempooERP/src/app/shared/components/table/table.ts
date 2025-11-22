@@ -6,8 +6,11 @@ import {
   output,
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+
 import { NgTemplateOutlet } from '@angular/common';
 import { PagedList } from '../../../core/api/PagedList';
+import { TableActions } from '../../enums/table-actions';
 
 export interface TableColumn {
   field: string;
@@ -18,7 +21,7 @@ export interface TableColumn {
 }
 
 export interface PageChangeEvent {
-  page: number;      // 1-based
+  page: number; // 1-based
   pageSize: number;
 }
 
@@ -30,7 +33,7 @@ export interface SortChangeEvent {
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [TableModule, NgTemplateOutlet],
+  imports: [TableModule, ButtonModule, NgTemplateOutlet],
   templateUrl: './table.html',
   styleUrls: ['./table.css'],
 })
@@ -45,9 +48,13 @@ export class TableComponent<T = any> {
 
   emptyMessage = input('No hay datos disponibles');
 
+  actions = input<TableActions[]>([]);
+
   rowClick = output<T>();
   pageChange = output<PageChangeEvent>();
   sortChange = output<SortChangeEvent>();
+
+  defaultActionIcon = 'pi pi-question';
 
   // body custom opcional
   @ContentChild('body', { static: false }) bodyTemplate?: TemplateRef<any>;
@@ -89,8 +96,7 @@ export class TableComponent<T = any> {
   onSort(event: any): void {
     if (!event.field) return;
 
-    const sortDirection: 'asc' | 'desc' =
-      event.order === 1 ? 'asc' : 'desc';
+    const sortDirection: 'asc' | 'desc' = event.order === 1 ? 'asc' : 'desc';
 
     this.sortChange.emit({
       sortBy: event.field,
