@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using TempooERP.Api.Modules;
 using TempooERP.BuildingBlocks.API.Middleware;
 using TempooERP.Infrastructure.Data;
@@ -17,7 +18,10 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .ConfigureCatalogServices();
 
-// Seeder as scoped; executed manually inside a scope after migrations.
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi();
+
 builder.Services.AddScoped<SeedDatabase>();
 
 builder.Services.AddCors(options =>
@@ -48,6 +52,16 @@ if (app.Environment.IsDevelopment())
     Console.WriteLine("Seeding database (idempotent)...");
     await seeder.SeedAsync();
     Console.WriteLine("Database seed step finished.");
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+else
+{
+    app.UseExceptionHandler();
 }
 
 app.UseCors();
