@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TempooERP.BuildingBlocks.Domain;
 using TempooERP.Modules.Catalog.Domain.Products;
 using TempooERP.Modules.Sales.Domain.Orders;
 
@@ -22,5 +23,35 @@ public class ErpDbContext(DbContextOptions<ErpDbContext> options,
         {
             builder.Configure(modelBuilder);
         }
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedBy = "system"; // _currentUserService.UserId;'
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.LastModifiedBy = "system";
+                    entry.Entity.LastModifiedAt = DateTime.UtcNow;
+                    break;
+                case EntityState.Detached:
+                    break;
+                case EntityState.Unchanged:
+                    break;
+                case EntityState.Deleted:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        return result;
     }
 }
