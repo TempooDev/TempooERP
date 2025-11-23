@@ -5,7 +5,7 @@ using TempooERP.Modules.Sales.Domain.Orders;
 namespace TempooERP.Infrastructure.Data.Modules.Sales;
 
 /// <summary>
-/// Adapter exposing read-only IQueryable surfaces required by application layer.
+/// Adapter exposing write operations required by the application layer.
 /// </summary>
 public sealed class SalesWriteDbContextAdapter(ErpDbContext db) : WriteDbContext(db), ISalesWriteDbContext
 {
