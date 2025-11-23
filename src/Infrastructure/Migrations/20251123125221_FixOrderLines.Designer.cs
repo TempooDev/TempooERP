@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TempooERP.Infrastructure.Data;
@@ -11,9 +12,11 @@ using TempooERP.Infrastructure.Data;
 namespace TempooERP.Infrastructure.Migrations
 {
     [DbContext(typeof(ErpDbContext))]
-    partial class ErpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251123125221_FixOrderLines")]
+    partial class FixOrderLines
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,6 +116,9 @@ namespace TempooERP.Infrastructure.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("OrderId1")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
@@ -129,6 +135,8 @@ namespace TempooERP.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderId1");
+
                     b.HasIndex("OrderId", "ProductId");
 
                     b.ToTable("OrderLines", "sales");
@@ -136,9 +144,15 @@ namespace TempooERP.Infrastructure.Migrations
 
             modelBuilder.Entity("TempooERP.Modules.Sales.Domain.Orders.OrderLine", b =>
                 {
+                    b.HasOne("TempooERP.Modules.Sales.Domain.Orders.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TempooERP.Modules.Sales.Domain.Orders.Order", "Order")
                         .WithMany("OrderLines")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("OrderId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

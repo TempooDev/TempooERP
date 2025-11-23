@@ -4,7 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using TempooERP.Infrastructure.Data;
 using TempooERP.Modules.Catalog.Application.Abstractions;
 using TempooERP.Infrastructure.Repositories;
-using TempooERP.BuildingBlocks.Application;
+using TempooERP.BuildingBlocks.Application.Persistence;
+using TempooERP.Infrastructure.Data.Modules.Catalog;
+using TempooERP.Infrastructure.Data.Modules.Sales;
 
 namespace TempooERP.Infrastructure.Extensions;
 
@@ -21,14 +23,17 @@ public static class ServiceCollectionExtensions
                 "Connection string 'erp-database' not found in configuration (ConnectionStrings:erp-database).");
         }
 
+        services.AddScoped<IModuleModelBuilder, CatalogModelBuilder>();
+        services.AddScoped<IModuleModelBuilder, SalesModelBuilder>();
+
         services.AddDbContext<ErpDbContext>(opts =>
         {
             opts.UseNpgsql(connection);
         });
 
         // Register adapters for application abstractions
-        services.AddScoped<IErpReadDbContext, ErpReadDbContextAdapter>();
-        services.AddScoped<IErpWriteDbContext, ErpWriteDbContextAdapter>();
+        services.AddScoped<ICatalogReadDbContext, CatalogReadDbContextAdapter>();
+        services.AddScoped<ICatalogWriteDbContext, CatalogWriteDbContextAdapter>();
         services.AddScoped<IProductReadRepository, ProductReadRepository>();
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

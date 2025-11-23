@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using TempooERP.BuildingBlocks.Domain;
 
 namespace TempooERP.Modules.Catalog.Domain.Products;
 
-public class Product
+public class Product : AuditableEntity
 {
-    public Guid Id { get; set; }
-
     [Required]
     [MaxLength(200)]
     public string Name { get; private set; } = string.Empty;

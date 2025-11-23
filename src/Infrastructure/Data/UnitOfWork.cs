@@ -1,4 +1,4 @@
-using TempooERP.BuildingBlocks.Application;
+using TempooERP.BuildingBlocks.Application.Persistence;
 
 namespace TempooERP.Infrastructure.Data;
 

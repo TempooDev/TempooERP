@@ -1,15 +1,15 @@
-using TempooERP.BuildingBlocks.Application;
 using TempooERP.BuildingBlocks.Application.Abstractions;
+using TempooERP.BuildingBlocks.Application.Persistence;
 using TempooERP.Modules.Catalog.Application.Abstractions;
 
 namespace TempooERP.Modules.Catalog.Application.Products.Commands.DeleteProduct;
 
 public sealed class DeleteProductHandler(
     IUnitOfWork unitOfWork,
-    IErpWriteDbContext dbContext) : ICommandHandler<DeleteProductCommand>
+    ICatalogWriteDbContext dbContext) : ICommandHandler<DeleteProductCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IErpWriteDbContext _dbContext = dbContext;
+    private readonly ICatalogWriteDbContext _dbContext = dbContext;
 
     public async Task HandleAsync(DeleteProductCommand command, CancellationToken cancellationToken)
     {
