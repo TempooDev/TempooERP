@@ -7,7 +7,7 @@ namespace TempooERP.Infrastructure.Data.Modules.Sales;
 /// <summary>
 /// Adapter exposing read-only IQueryable surfaces required by application layer.
 /// </summary>
-public sealed class SalesWriteDbContextAdapter(ErpDbContext db) :WriteDbContext(db), ISalesWriteDbContext
+public sealed class SalesWriteDbContextAdapter(ErpDbContext db) : WriteDbContext(db), ISalesWriteDbContext
 {
     private readonly ErpDbContext _db = db;
 
