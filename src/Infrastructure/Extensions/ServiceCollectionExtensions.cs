@@ -34,6 +34,8 @@ public static class ServiceCollectionExtensions
         // Register adapters for application abstractions
         services.AddScoped<ICatalogReadDbContext, CatalogReadDbContextAdapter>();
         services.AddScoped<ICatalogWriteDbContext, CatalogWriteDbContextAdapter>();
+        services.AddScoped<ISalesReadDbContext, SalesReadDbContextAdapter>();
+        services.AddScoped<ISalesWriteDbContext, SalesWriteDbContextAdapter>();
         services.AddScoped<IProductReadRepository, ProductReadRepository>();
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
