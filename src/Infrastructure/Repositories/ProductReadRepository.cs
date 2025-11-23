@@ -8,9 +8,9 @@ using TempooERP.Modules.Catalog.Domain.Products;
 
 namespace TempooERP.Infrastructure.Repositories;
 
-public sealed class ProductReadRepository(IErpReadDbContext db) : IProductReadRepository
+public sealed class ProductReadRepository(ICatalogReadDbContext db) : IProductReadRepository
 {
-    private readonly IErpReadDbContext _db = db;
+    private readonly ICatalogReadDbContext _db = db;
 
     public async Task<ProductDto?> GetByIdAsync(
         Guid id,

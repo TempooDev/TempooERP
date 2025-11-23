@@ -1,4 +1,4 @@
-namespace TempooERP.BuildingBlocks.Application;
+namespace TempooERP.BuildingBlocks.Application.Persistence;
 
 public interface IUnitOfWork
 {

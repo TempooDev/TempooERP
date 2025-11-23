@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Modules/Catalog/TempooERP.Modules.Catalog.csproj" />
+    <ProjectReference Include="..\Modules\Sales\TempooERP.Modules.Sales.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
-using TempooERP.BuildingBlocks.Application;
 using TempooERP.BuildingBlocks.Application.Abstractions;
+using TempooERP.BuildingBlocks.Application.Persistence;
 using TempooERP.Modules.Catalog.Application.Abstractions;
 using TempooERP.Modules.Catalog.Domain.Products;
 
@@ -7,10 +7,10 @@ namespace TempooERP.Modules.Catalog.Application.Products.Commands.UpdateProduct;
 
 public sealed class UpdateProductHandler(
     IUnitOfWork unitOfWork,
-    IErpWriteDbContext dbContext) : ICommandHandler<UpdateProductCommand>
+    ICatalogWriteDbContext dbContext) : ICommandHandler<UpdateProductCommand>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IErpWriteDbContext _dbContext = dbContext;
+    private readonly ICatalogWriteDbContext _dbContext = dbContext;
 
     public async Task HandleAsync(UpdateProductCommand command, CancellationToken cancellationToken)
     {
