@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using TempooERP.BuildingBlocks.Application.Abstractions;
-using TempooERP.Modules.Sales.Application.Orders;
+using TempooERP.Modules.Sales.Contracts;
 using TempooERP.Modules.Sales.Domain.Orders;
 
 namespace TempooERP.Modules.Sales.Application.Abstractions;
@@ -17,4 +17,6 @@ public interface IOrderReadRepository
         string? sortBy,
         string? sortDirection,
         CancellationToken ct = default);
+
+    Task<OrderDto?> GetByIdAsync(Guid id, CancellationToken ct = default);
 }

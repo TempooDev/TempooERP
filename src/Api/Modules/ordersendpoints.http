@@ -1,0 +1,66 @@
+### Variables
+@baseUrl = http://localhost:5000
+@salesApi = {{baseUrl}}/api/sales
+
+### Health Check
+GET {{baseUrl}}/api/health
+
+### Get all orders (paginated)
+GET {{salesApi}}/orders?Page=1&PageSize=10
+Content-Type: application/json
+
+### Get all orders with filters
+GET {{salesApi}}/orders?CustomerId=00000000-0000-0000-0000-000000000001&Status=Pending&Page=1&PageSize=10
+Content-Type: application/json
+
+### Get order by ID
+@orderId = 00000000-0000-0000-0000-000000000001
+GET {{salesApi}}/orders/{{orderId}}
+Content-Type: application/json
+
+### Create a new order
+POST {{salesApi}}/orders
+Content-Type: application/json
+
+{
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "orderLines": [
+    {
+      "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "productName": "Sample Product",
+      "unitPrice": 19.99,
+      "quantity": 2
+    },
+    {
+      "productId": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+      "productName": "Another Product",
+      "unitPrice": 29.99,
+      "quantity": 1
+    }
+  ]
+}
+
+### Update order status
+@orderIdToUpdate = 00000000-0000-0000-0000-000000000001
+PUT {{salesApi}}/orders/{{orderIdToUpdate}}
+Content-Type: application/json
+
+{
+  "status": "Processing"
+}
+
+### Update order status to Completed
+PUT {{salesApi}}/orders/{{orderIdToUpdate}}
+Content-Type: application/json
+
+{
+  "status": "Completed"
+}
+
+### Update order status to Canceled
+PUT {{salesApi}}/orders/{{orderIdToUpdate}}
+Content-Type: application/json
+
+{
+  "status": "Canceled"
+}

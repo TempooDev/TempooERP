@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Sales.Application.Abstractions;
-using TempooERP.Modules.Sales.Application.Orders;
+using TempooERP.Modules.Sales.Contracts;
 using TempooERP.Modules.Sales.Domain.Orders;
 
 namespace TempooERP.Infrastructure.Repositories;
@@ -21,6 +21,7 @@ public sealed class OrderReadRepository(ISalesReadDbContext db) : IOrderReadRepo
         CancellationToken ct = default)
     {
         var query = _db.Orders
+            .Include(o => o.OrderLines)
             .Where(predicate);
 
         query = query.ApplyOrdering(sortBy, sortDirection);
@@ -32,13 +33,46 @@ public sealed class OrderReadRepository(ISalesReadDbContext db) : IOrderReadRepo
             .Take(pageSize)
             .Select(o => new OrderDto(
                 o.Id,
-                o.UserId,
                 o.Number,
-                o.OrderLines.Sum(ol => ol.Quantity * ol.UnitPrice),
-                o.Status.ToString()
-                ))
+                o.Status.ToString(),
+                o.UserId,
+                o.CreatedAt,
+                o.UpdatedAt,
+                o.OrderLines.Select(ol => new OrderLineDto(
+                    ol.Id,
+                    ol.ProductId,
+                    ol.ProductName,
+                    ol.UnitPrice,
+                    ol.Quantity,
+                    ol.TotalLinePrice
+                )).ToList()
+            ))
             .ToListAsync(ct);
 
         return new PagedResult<OrderDto>(items, total, page, pageSize);
+    }
+
+    public async Task<OrderDto?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        return await _db.Orders
+            .Include(o => o.OrderLines)
+            .Where(o => o.Id == id)
+            .Select(o => new OrderDto(
+                o.Id,
+                o.Number,
+                o.Status.ToString(),
+                o.UserId,
+                o.CreatedAt,
+                o.UpdatedAt,
+                o.OrderLines.Select(ol => new OrderLineDto(
+                    ol.Id,
+                    ol.ProductId,
+                    ol.ProductName,
+                    ol.UnitPrice,
+                    ol.Quantity,
+                    ol.TotalLinePrice
+                )).ToList()
+            ))
+            .FirstOrDefaultAsync(ct);
     }
 }

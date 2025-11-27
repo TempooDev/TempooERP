@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.Modules.Sales.Application.Abstractions;
+using TempooERP.Modules.Sales.Contracts;
 using TempooERP.Modules.Sales.Domain.Orders;
 
 namespace TempooERP.Modules.Sales.Application.Orders.Queries.GetByCriteria;
