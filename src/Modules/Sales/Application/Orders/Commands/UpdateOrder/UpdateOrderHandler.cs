@@ -18,21 +18,16 @@ public sealed class UpdateOrderHandler(
         CancellationToken ct = default)
     {
         var order = await _dbContext.Orders
-            .FirstOrDefaultAsync(o => o.Id == command.Id, ct);
+            .FirstOrDefaultAsync(o => o.Id == command.Id, ct)
+            ?? throw new InvalidOperationException($"Order with Id {command.Id} not found");
 
-        if (order is null)
-        {
-            throw new InvalidOperationException($"Order with Id {command.Id} not found");
-        }
-
-        if (Enum.TryParse<OrderStatus>(command.Status, true, out var status))
-        {
-            order.UpdateStatus(status);
-            await _unitOfWork.SaveChangesAsync(ct);
-        }
-        else
+        if (!Enum.TryParse<OrderStatus>(command.Status, true, out var status))
         {
             throw new ArgumentException($"Invalid status: {command.Status}");
         }
+
+        order.UpdateStatus(status);
+        _dbContext.Update(order);
+        await _unitOfWork.SaveChangesAsync(ct);
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.BuildingBlocks.Application.Persistence;
 using TempooERP.Modules.Sales.Application.Abstractions;
@@ -26,9 +27,7 @@ public sealed class CreateOrderHandler(
 
         var order = Order.CreateOrder(orderNumber, command.UserId, OrderStatus.Pending);
 
-        await _dbContext.AddAsync(order, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
-
+        // Add order lines before saving
         foreach (var lineCommand in command.OrderLines)
         {
             var orderLine = OrderLine.CreateOrderLine(
@@ -41,6 +40,7 @@ public sealed class CreateOrderHandler(
             order.AddLine(orderLine);
         }
 
+        await _dbContext.AddAsync(order, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
         return order.Id;
