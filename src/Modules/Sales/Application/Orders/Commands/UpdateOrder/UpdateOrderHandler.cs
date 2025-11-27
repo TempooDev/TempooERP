@@ -18,7 +18,8 @@ public sealed class UpdateOrderHandler(
         CancellationToken ct = default)
     {
         var order = await _dbContext.Orders
-            .FirstOrDefaultAsync(o => o.Id == command.Id, ct)
+            .Where(o => o.Id == command.Id)
+            .FirstOrDefaultAsync(ct)
             ?? throw new InvalidOperationException($"Order with Id {command.Id} not found");
 
         if (!Enum.TryParse<OrderStatus>(command.Status, true, out var status))

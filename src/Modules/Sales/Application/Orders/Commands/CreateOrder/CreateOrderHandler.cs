@@ -21,7 +21,7 @@ public sealed class CreateOrderHandler(
         var lastOrderNumber = await _dbContext.Orders
             .OrderByDescending(o => o.Number)
             .Select(o => o.Number)
-            .FirstOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(ct) ?? 0;
 
         var orderNumber = lastOrderNumber + 1;
 
