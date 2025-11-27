@@ -6,5 +6,4 @@ public sealed record OrderDto(
     string Status,
     Guid UserId,
     DateTime CreatedAt,
-    DateTime? UpdatedAt,
     IReadOnlyCollection<OrderLineDto> OrderLines);

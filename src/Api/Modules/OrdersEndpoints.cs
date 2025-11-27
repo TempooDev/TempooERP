@@ -37,7 +37,7 @@ public static class OrdersEndpoints
 
                 return result is null
                     ? Results.NotFound(Result.Fail($"Order with id {id} not found"))
-                    : Results.Ok(Result.Ok(result));
+                    : Results.Ok(result);
             })
             .WithTags(SalesEndpoints.Tag)
             .WithName("GetOrderById")
@@ -48,15 +48,15 @@ public static class OrdersEndpoints
                 [FromServices] ICommandHandler<CreateOrderCommand, Guid> commandHandler,
                 [FromBody] CreateOrderCommand command,
                 CancellationToken cancellationToken) =>
-            {
-                var orderId = await commandHandler.HandleAsync(command, cancellationToken);
-                return Results.Created(
-                    $"/api/sales/orders/{orderId}",
-                    Result.Ok(orderId, "Order created successfully."));
-            })
-            .WithTags(SalesEndpoints.Tag)
-            .WithName("CreateOrder")
-            .WithSummary("Creates a new order with order lines.");
+                {
+                    var orderId = await commandHandler.HandleAsync(command, cancellationToken);
+                    return Results.Created(
+                        $"/api/sales/orders/{orderId}",
+                        Result.Ok("Order created successfully."));
+                })
+                .WithTags(SalesEndpoints.Tag)
+                .WithName("CreateOrder")
+                .WithSummary("Creates a new order with order lines.");
 
             group.MapPut("/orders/{id}", async (
                 [FromRoute] Guid id,
@@ -64,14 +64,14 @@ public static class OrdersEndpoints
                 [FromServices] ICommandHandler<UpdateOrderCommand> commandHandler,
                 CancellationToken cancellationToken
             ) =>
-            {
-                var command = new UpdateOrderCommand(id, updateDto.Status);
-                await commandHandler.HandleAsync(command, cancellationToken);
-                return Results.NoContent();
-            })
-            .WithTags(SalesEndpoints.Tag)
-            .WithName("UpdateOrder")
-            .WithSummary("Updates an order's status.");
+                    {
+                        var command = new UpdateOrderCommand(id, updateDto.Status);
+                        await commandHandler.HandleAsync(command, cancellationToken);
+                        return Results.NoContent();
+                    })
+                    .WithTags(SalesEndpoints.Tag)
+                    .WithName("UpdateOrder")
+                    .WithSummary("Updates an order's status.");
         }
     }
 }

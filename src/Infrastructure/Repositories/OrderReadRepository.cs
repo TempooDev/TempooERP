@@ -37,7 +37,6 @@ public sealed class OrderReadRepository(ISalesReadDbContext db) : IOrderReadRepo
                 o.Status.ToString(),
                 o.UserId,
                 o.CreatedAt,
-                o.UpdatedAt,
                 o.OrderLines.Select(ol => new OrderLineDto(
                     ol.Id,
                     ol.ProductId,
@@ -63,7 +62,6 @@ public sealed class OrderReadRepository(ISalesReadDbContext db) : IOrderReadRepo
                 o.Status.ToString(),
                 o.UserId,
                 o.CreatedAt,
-                o.UpdatedAt,
                 o.OrderLines.Select(ol => new OrderLineDto(
                     ol.Id,
                     ol.ProductId,
