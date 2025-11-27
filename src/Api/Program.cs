@@ -5,6 +5,7 @@ using TempooERP.BuildingBlocks.API.Middleware;
 using TempooERP.Infrastructure.Data;
 using TempooERP.Infrastructure.Extensions;
 using TempooERP.Modules.Catalog.Infrastructure;
+using TempooERP.Modules.Sales.Infrastructure;
 using TempooERP.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +17,8 @@ var frontendOrigin = builder.Configuration["Frontend:Origin"]
 builder.Services.AddValidation();
 builder.Services
     .AddInfrastructure(builder.Configuration)
-    .ConfigureCatalogServices();
-
+    .ConfigureCatalogServices()
+    .ConfigureSalesServices();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
@@ -70,5 +71,6 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapGet("/api/health", () => Results.Ok(new { ok = true }));
 
 app.MapCatalogEndpoints();
+app.MapSalesEndpoints();
 
 app.Run();
