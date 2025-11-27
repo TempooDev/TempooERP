@@ -7,6 +7,7 @@ using TempooERP.Infrastructure.Repositories;
 using TempooERP.BuildingBlocks.Application.Persistence;
 using TempooERP.Infrastructure.Data.Modules.Catalog;
 using TempooERP.Infrastructure.Data.Modules.Sales;
+using TempooERP.Modules.Sales.Application.Abstractions;
 
 namespace TempooERP.Infrastructure.Extensions;
 
@@ -37,6 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISalesReadDbContext, SalesReadDbContextAdapter>();
         services.AddScoped<ISalesWriteDbContext, SalesWriteDbContextAdapter>();
         services.AddScoped<IProductReadRepository, ProductReadRepository>();
+        services.AddScoped<IOrderReadRepository, OrderReadRepository>();
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

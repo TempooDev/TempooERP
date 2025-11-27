@@ -1,6 +1,5 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using TempooERP.Api.Modules;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.BuildingBlocks.Application.Extensions;
 using TempooERP.Modules.Catalog.Application.Products.Commands.CreateProduct;
@@ -36,7 +35,7 @@ public static class ProductEndpoints
                 [FromServices] IQueryHandler<GetProductByIdQuery, Result<ProductDto?>> queryHandler,
                 CancellationToken ct) =>
             {
-                    var result = await queryHandler.HandleAsync(new GetProductByIdQuery(id), ct);
+                var result = await queryHandler.HandleAsync(new GetProductByIdQuery(id), ct);
 
                 return result.Data is null
                     ? Results.NotFound()

@@ -13,13 +13,14 @@ public sealed class SeedDatabase(ErpDbContext dbContext)
         if (!await _dbContext.Products.AnyAsync())
         {
             await SeedProductsAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         if (!await _dbContext.Orders.AnyAsync())
         {
             await SeedOrdersAsync();
+            await _dbContext.SaveChangesAsync();
         }
-
     }
 
     private async Task SeedProductsAsync()

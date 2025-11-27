@@ -1,5 +1,3 @@
-using TempooERP.Api.Modules;
-
 namespace TempooERP.Api.Modules;
 
 public static class CatalogEndpoints
