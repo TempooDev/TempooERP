@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.BuildingBlocks.Application.Persistence;
 using TempooERP.Modules.Sales.Application.Abstractions;
@@ -17,9 +16,7 @@ public sealed class UpdateOrderHandler(
         UpdateOrderCommand command,
         CancellationToken ct = default)
     {
-        var order = await _dbContext.Orders
-            .Where(o => o.Id == command.Id)
-            .FirstOrDefaultAsync(ct)
+        var order = _dbContext.Orders.FirstOrDefault(o => o.Id == command.Id)
             ?? throw new InvalidOperationException($"Order with Id {command.Id} not found");
 
         if (!Enum.TryParse<OrderStatus>(command.Status, true, out var status))

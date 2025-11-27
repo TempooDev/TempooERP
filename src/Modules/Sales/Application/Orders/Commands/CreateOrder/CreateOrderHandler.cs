@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using TempooERP.BuildingBlocks.Application.Abstractions;
 using TempooERP.BuildingBlocks.Application.Persistence;
 using TempooERP.Modules.Sales.Application.Abstractions;
@@ -18,10 +17,10 @@ public sealed class CreateOrderHandler(
         CancellationToken ct = default)
     {
         // Generate order number (simple implementation - could be improved with a sequence)
-        var lastOrderNumber = await _dbContext.Orders
+        var lastOrderNumber = _dbContext.Orders
             .OrderByDescending(o => o.Number)
             .Select(o => o.Number)
-            .FirstOrDefaultAsync(ct) ?? 0;
+            .FirstOrDefault();
 
         var orderNumber = lastOrderNumber + 1;
 
